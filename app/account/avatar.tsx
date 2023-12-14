@@ -5,6 +5,7 @@ import Image from "next/image"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import { buttonVariants } from "@/components/ui/button"
 
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"]
 
@@ -81,19 +82,26 @@ export default function Avatar({
           height={size}
           src={avatarUrl}
           alt="Avatar"
-          className="avatar image"
+          className="max-w-full overflow-hidden rounded-md object-cover"
           style={{ height: size, width: size }}
         />
       ) : (
         <div
-          className="avatar no-image"
+          className="max-w-full overflow-hidden rounded-md border bg-slate-600"
           style={{ height: size, width: size }}
         />
       )}
       <div style={{ width: size }}>
-        <label className="button primary block" htmlFor="single">
+        <label
+          className={`${buttonVariants({
+            variant: "default",
+            size: "default",
+          })} mt-2 block w-full`}
+          htmlFor="single"
+        >
           {uploading ? "Uploading ..." : "Upload"}
         </label>
+
         <input
           style={{
             visibility: "hidden",
