@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import AuthForm from "@/components/form/auth-form"
 
 export default function IndexPage() {
   return (
@@ -15,23 +16,17 @@ export default function IndexPage() {
           into your apps. Free. Open Source. And Next.js 13 Ready.
         </p>
       </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          GitHub
-        </Link>
+
+      <div className="col-6">
+        <h1 className="header">Supabase Auth + Storage</h1>
+        <p className="">
+          Experience our Auth and Storage through a simple profile management
+          example. Create a user profile and upload an avatar image. Fast,
+          simple, secure.
+        </p>
+      </div>
+      <div className="col-6 auth-widget">
+        <AuthForm />
       </div>
     </section>
   )
