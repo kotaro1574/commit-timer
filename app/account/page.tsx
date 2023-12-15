@@ -29,14 +29,12 @@ export default async function AccountPage() {
     throw error
   }
 
-  console.log({ data, user })
-
   return (
     <div>
       <AccountForm user={user} profile={data} />
-      <div className="mt-8">
+      <div className="mt-6">
         <form action="/auth/signout" method="post">
-          <Button className="button block" type="submit">
+          <Button variant={"outline"} className="block w-full" type="submit">
             Sign out
           </Button>
         </form>
