@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { startTransition, useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   User,
@@ -40,6 +41,7 @@ type Props = {
 
 export default function AccountForm({ profile, user }: Props) {
   const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -73,6 +75,9 @@ export default function AccountForm({ profile, user }: Props) {
       if (error) throw error
       alert("Profile updated!")
       setLoading(false)
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       alert("Error updating the data!")
     } finally {
