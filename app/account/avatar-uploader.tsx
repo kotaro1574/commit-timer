@@ -1,10 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
-import Image from "next/image"
+import React, { useState } from "react"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
+import Avatar from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
 
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"]
@@ -21,28 +21,7 @@ export default function AvatarUploader({
   onUpload: (url: string) => void
 }) {
   const supabase = createClientComponentClient<Database>()
-  const [avatarUrl, setAvatarUrl] = useState(url)
   const [uploading, setUploading] = useState(false)
-
-  useEffect(() => {
-    async function downloadImage(path: string) {
-      try {
-        const { data, error } = await supabase.storage
-          .from("avatars")
-          .download(path)
-        if (error) {
-          throw error
-        }
-
-        const url = URL.createObjectURL(data)
-        setAvatarUrl(url)
-      } catch (error) {
-        console.log("Error downloading image: ", error)
-      }
-    }
-
-    if (url) downloadImage(url)
-  }, [url, supabase])
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
     event
@@ -76,21 +55,7 @@ export default function AvatarUploader({
 
   return (
     <div>
-      {avatarUrl && avatarUrl.startsWith("blob:") ? (
-        <Image
-          width={size}
-          height={size}
-          src={avatarUrl}
-          alt="Avatar"
-          className="max-w-full overflow-hidden rounded-md object-cover"
-          style={{ height: size, width: size }}
-        />
-      ) : (
-        <div
-          className="max-w-full overflow-hidden rounded-md border bg-slate-600"
-          style={{ height: size, width: size }}
-        />
-      )}
+      <Avatar url={url ?? ""} size={size} />
       <div style={{ width: size }}>
         <label
           className={`${buttonVariants({
