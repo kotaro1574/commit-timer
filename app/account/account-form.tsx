@@ -1,22 +1,26 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import {
+  User,
+  createClientComponentClient,
+} from "@supabase/auth-helpers-nextjs"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
+import { Database } from "@/types/supabase"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
-
-import { Database } from "@/types/supabase";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-
-
-import Avatar from "./avatar";
-
+import AvatarUploader from "./avatar-uploader"
 
 const formSchema = z.object({
   full_name: z.string(),
@@ -86,7 +90,7 @@ export default function AccountForm({ profile, user }: Props) {
             <FormItem>
               <FormLabel htmlFor="avatar_url">Avatar</FormLabel>
               <FormControl>
-                <Avatar
+                <AvatarUploader
                   uid={user.id}
                   url={field.value}
                   size={150}

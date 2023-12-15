@@ -9,7 +9,7 @@ import { buttonVariants } from "@/components/ui/button"
 
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"]
 
-export default function Avatar({
+export default function AvatarUploader({
   uid,
   url,
   size,
