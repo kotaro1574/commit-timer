@@ -21,7 +21,7 @@ export default function Avatar({
   onUpload: (url: string) => void
 }) {
   const supabase = createClientComponentClient<Database>()
-  const [avatarUrl, setAvatarUrl] = useState<Profiles["avatar_url"]>(url)
+  const [avatarUrl, setAvatarUrl] = useState(url)
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function Avatar({
 
   return (
     <div>
-      {avatarUrl ? (
+      {avatarUrl && avatarUrl.startsWith("blob:") ? (
         <Image
           width={size}
           height={size}

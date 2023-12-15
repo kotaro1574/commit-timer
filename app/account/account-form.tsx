@@ -1,73 +1,69 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { Session } from "inspector"
+import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
-  Session,
+  User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
 import { Database } from "@/types/supabase"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
 
 import Avatar from "./avatar"
 
-export default function AccountForm({ session }: { session: Session | null }) {
+const formSchema = z.object({
+  full_name: z.string(),
+  username: z.string(),
+  website: z.string(),
+  avatar_url: z.string(),
+  email: z.string().email(),
+})
+
+type Props = {
+  user: User
+  profile: Database["public"]["Tables"]["profiles"]["Row"]
+}
+
+export default function AccountForm({ profile, user }: Props) {
   const supabase = createClientComponentClient<Database>()
-  const [loading, setLoading] = useState(true)
-  const [fullname, setFullname] = useState<string | null>(null)
-  const [username, setUsername] = useState<string | null>(null)
-  const [website, setWebsite] = useState<string | null>(null)
-  const [avatar_url, setAvatarUrl] = useState<string | null>(null)
-  const user = session?.user
+  const [loading, setLoading] = useState(false)
 
-  const getProfile = useCallback(async () => {
-    try {
-      setLoading(true)
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: user.email,
+      full_name: profile.full_name || "",
+      username: profile.username || "",
+      website: profile.website || "",
+      avatar_url: profile.avatar_url || "",
+    },
+  })
 
-      if (!user) return null
-
-      const { data, error, status } = await supabase
-        .from("profiles")
-        .select(`full_name, username, website, avatar_url`)
-        .eq("id", user?.id)
-        .single()
-
-      if (error && status !== 406) {
-        throw error
-      }
-
-      if (data) {
-        setFullname(data.full_name)
-        setUsername(data.username)
-        setWebsite(data.website)
-        setAvatarUrl(data.avatar_url)
-      }
-    } catch (error) {
-      alert("Error loading user data!")
-    } finally {
-      setLoading(false)
-    }
-  }, [user, supabase])
-
-  useEffect(() => {
-    getProfile()
-  }, [user, getProfile])
-
-  async function updateProfile({
+  // 2. Define a submit handler.
+  const onSubmit = async ({
+    full_name,
     username,
     website,
     avatar_url,
-  }: {
-    username: string | null
-    fullname: string | null
-    website: string | null
-    avatar_url: string | null
-  }) {
+  }: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
 
       const { error } = await supabase.from("profiles").upsert({
-        id: user?.id as string,
-        full_name: fullname,
+        id: user.id,
+        full_name,
         username,
         website,
         avatar_url,
@@ -75,6 +71,7 @@ export default function AccountForm({ session }: { session: Session | null }) {
       })
       if (error) throw error
       alert("Profile updated!")
+      setLoading(false)
     } catch (error) {
       alert("Error updating the data!")
     } finally {
@@ -83,67 +80,84 @@ export default function AccountForm({ session }: { session: Session | null }) {
   }
 
   return (
-    <div className="form-widget">
-      <Avatar
-        uid={user?.id ?? ""}
-        url={avatar_url}
-        size={150}
-        onUpload={(url) => {
-          setAvatarUrl(url)
-          updateProfile({ fullname, username, website, avatar_url: url })
-        }}
-      />
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" value={session?.user.email} disabled />
-      </div>
-      <div>
-        <label htmlFor="fullName">Full Name</label>
-        <input
-          id="fullName"
-          type="text"
-          value={fullname || ""}
-          onChange={(e) => setFullname(e.target.value)}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="avatar_url"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="avatar_url">Avatar</FormLabel>
+              <FormControl>
+                <Avatar
+                  uid={user.id}
+                  url={field.value}
+                  size={150}
+                  onUpload={(url) => {
+                    form.setValue("avatar_url", url)
+                    onSubmit(form.getValues())
+                  }}
+                />
+              </FormControl>
+            </FormItem>
+          )}
         />
-      </div>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={username || ""}
-          onChange={(e) => setUsername(e.target.value)}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormControl>
+                <Input disabled {...field} />
+              </FormControl>
+            </FormItem>
+          )}
         />
-      </div>
-      <div>
-        <label htmlFor="website">Website</label>
-        <input
-          id="website"
-          type="url"
-          value={website || ""}
-          onChange={(e) => setWebsite(e.target.value)}
+        <FormField
+          control={form.control}
+          name="full_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="full_name">Full Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+            </FormItem>
+          )}
         />
-      </div>
-
-      <div>
-        <button
-          className="button primary block"
-          onClick={() =>
-            updateProfile({ fullname, username, website, avatar_url })
-          }
-          disabled={loading}
+        <FormField
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="username">Username</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="website"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="website">Website</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button
+          type="submit"
+          className="block w-full"
+          disabled={loading || !form.formState.isValid}
         >
           {loading ? "Loading ..." : "Update"}
-        </button>
-      </div>
-
-      <div>
-        <form action="/auth/signout" method="post">
-          <button className="button block" type="submit">
-            Sign out
-          </button>
-        </form>
-      </div>
-    </div>
+        </Button>
+      </form>
+    </Form>
   )
 }
