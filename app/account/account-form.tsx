@@ -1,27 +1,22 @@
-"use client"
+"use client";
 
-import { Session } from "inspector"
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  User,
-  createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User, createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Database } from "@/types/supabase"
-import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 
-import Avatar from "./avatar"
+
+import { Database } from "@/types/supabase";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+
+
+import Avatar from "./avatar";
+
 
 const formSchema = z.object({
   full_name: z.string(),
@@ -33,7 +28,10 @@ const formSchema = z.object({
 
 type Props = {
   user: User
-  profile: Database["public"]["Tables"]["profiles"]["Row"]
+  profile: Omit<
+    Database["public"]["Tables"]["profiles"]["Row"],
+    "updated_at" | "id"
+  >
 }
 
 export default function AccountForm({ profile, user }: Props) {
@@ -51,7 +49,6 @@ export default function AccountForm({ profile, user }: Props) {
     },
   })
 
-  // 2. Define a submit handler.
   const onSubmit = async ({
     full_name,
     username,
