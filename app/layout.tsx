@@ -43,7 +43,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
-              <div className="container flex-1 pb-8 pt-6 md:py-10">
+              <div className="container max-w-[980px] flex-1 pb-8 pt-6 md:py-10">
                 {children}
               </div>
             </div>
