@@ -19,7 +19,7 @@ export default async function CommitsPage() {
 
   const { data, error, status } = await supabase
     .from("commits")
-    .select(`title, time`)
+    .select("title")
     .eq("user_id", user.id)
 
   if (!data) return null
@@ -35,7 +35,10 @@ export default async function CommitsPage() {
           <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
             Commits
           </h1>
-          <Link href={"/"} className={buttonVariants({ variant: "ghost" })}>
+          <Link
+            href={"/commits/create"}
+            className={buttonVariants({ variant: "ghost" })}
+          >
             <Icons.plus className="mr-2 h-4 w-4" />
             new commit
           </Link>
