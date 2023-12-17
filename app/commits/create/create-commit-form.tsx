@@ -1,10 +1,13 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { User } from "@supabase/supabase-js"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -18,10 +21,13 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
   title: z.string(),
-  time: z.number(),
+  time: z.coerce.number(),
 })
 
-export default function CreateCommitForm({ user }: { user: User }) {
+export default function CreateCommitForm() {
+  const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -30,11 +36,24 @@ export default function CreateCommitForm({ user }: { user: User }) {
     },
   })
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setLoading(true)
+
+      const { error } = await supabase.from("commits").insert({
+        title: values.title,
+        time: values.time,
+      })
+
+      if (error) throw error
+      alert("Commit created!")
+      setLoading(false)
+      router.push("/commits")
+    } catch (error) {
+      alert("Error updating the data!")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -68,7 +87,7 @@ export default function CreateCommitForm({ user }: { user: User }) {
           )}
         />
         <Button className="block w-full" type="submit">
-          Submit
+          {loading ? "loading.." : "Create"}
         </Button>
       </form>
     </Form>
