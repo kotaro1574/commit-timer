@@ -1,6 +1,7 @@
 import {
   AlarmPlus,
   Moon,
+  MoreVertical,
   Plus,
   SunMedium,
   Twitter,
@@ -17,4 +18,5 @@ export const Icons = {
   logo: AlarmPlus,
   user: UserIcon,
   plus: Plus,
+  more: MoreVertical,
 }

@@ -3,19 +3,13 @@ import Link from "next/link"
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
+
+import { CommitButton } from "./commit-button"
 
 export default async function CommitsPage() {
   const supabase = createServerComponentClient<Database>({ cookies })
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-
-  if (!session) return null
-
-  const user = session.user
 
   const { data, error, status } = await supabase.from("commits").select("title")
 
@@ -42,7 +36,7 @@ export default async function CommitsPage() {
       <div className="flex gap-4">
         {data.map((commit) => (
           <div className="flex flex-col items-start gap-2">
-            <Button>{commit.title}</Button>
+            <CommitButton>{commit.title}</CommitButton>
           </div>
         ))}
       </div>
