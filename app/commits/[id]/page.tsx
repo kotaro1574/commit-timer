@@ -14,7 +14,7 @@ export default async function CommitPage({
 
   const { data, error, status } = await supabase
     .from("commits")
-    .select("*")
+    .select("id, title, time")
     .eq("id", params.id)
     .single()
 
@@ -31,7 +31,7 @@ export default async function CommitPage({
           Edit Commit
         </h1>
       </div>
-      <UpdateCommitForm />
+      <UpdateCommitForm commit={data} />
     </section>
   )
 }

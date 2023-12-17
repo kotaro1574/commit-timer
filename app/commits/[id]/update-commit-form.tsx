@@ -24,15 +24,22 @@ const formSchema = z.object({
   time: z.coerce.number(),
 })
 
-export default function UpdateCommitForm() {
+export default function UpdateCommitForm({
+  commit,
+}: {
+  commit: Omit<
+    Database["public"]["Tables"]["commits"]["Row"],
+    "user_id" | "created_at"
+  >
+}) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      time: 0,
+      title: commit.title,
+      time: commit.time,
     },
   })
 
@@ -40,11 +47,13 @@ export default function UpdateCommitForm() {
     try {
       setLoading(true)
 
-      const { error } = await supabase.from("commits").update({
-        title: values.title,
-        time: values.time,
-      })
-      // .eq("id", params.id)
+      const { error } = await supabase
+        .from("commits")
+        .update({
+          title: values.title,
+          time: values.time,
+        })
+        .eq("id", commit.id)
 
       if (error) throw error
       alert("Commit updated!")
