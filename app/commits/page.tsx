@@ -17,10 +17,7 @@ export default async function CommitsPage() {
 
   const user = session.user
 
-  const { data, error, status } = await supabase
-    .from("commits")
-    .select("title")
-    .eq("user_id", user.id)
+  const { data, error, status } = await supabase.from("commits").select("title")
 
   if (!data) return null
 
