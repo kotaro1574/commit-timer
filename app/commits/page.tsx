@@ -11,7 +11,9 @@ import { CommitButton } from "./commit-button"
 export default async function CommitsPage() {
   const supabase = createServerComponentClient<Database>({ cookies })
 
-  const { data, error, status } = await supabase.from("commits").select("title")
+  const { data, error, status } = await supabase
+    .from("commits")
+    .select("id, title")
 
   if (!data) return null
 
@@ -36,7 +38,7 @@ export default async function CommitsPage() {
       <div className="flex gap-4">
         {data.map((commit) => (
           <div className="flex flex-col items-start gap-2">
-            <CommitButton>{commit.title}</CommitButton>
+            <CommitButton id={commit.id}>{commit.title}</CommitButton>
           </div>
         ))}
       </div>

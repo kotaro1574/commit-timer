@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 import { buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/icons"
 
-export function CommitDropdownMenu() {
+export function CommitDropdownMenu({ id }: { id: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -21,7 +23,9 @@ export function CommitDropdownMenu() {
         <Icons.more className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Edit</DropdownMenuItem>
+        <Link href={`/commits/${id}`}>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+        </Link>
         <DropdownMenuItem>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
