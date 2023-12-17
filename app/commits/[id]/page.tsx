@@ -3,6 +3,8 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 
+import UpdateCommitForm from "./update-commit-form"
+
 export default async function CommitPage({
   params,
 }: {
@@ -26,10 +28,10 @@ export default async function CommitPage({
     <section className="grid gap-6">
       <div className="flex w-full justify-between">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Edit Commits
+          Edit Commit
         </h1>
       </div>
-      <div className="flex gap-4">{data.title}</div>
+      <UpdateCommitForm />
     </section>
   )
 }
