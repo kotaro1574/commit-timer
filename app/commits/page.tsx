@@ -13,7 +13,7 @@ export default async function CommitsPage() {
 
   const { data, error, status } = await supabase
     .from("commits")
-    .select("id, title")
+    .select("id, title, time")
 
   if (!data) return null
 
@@ -38,7 +38,7 @@ export default async function CommitsPage() {
       <div className="flex gap-4">
         {data.map((commit) => (
           <div className="flex flex-col items-start gap-2">
-            <CommitButton id={commit.id}>{commit.title}</CommitButton>
+            <CommitButton commit={commit} />
           </div>
         ))}
       </div>

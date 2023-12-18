@@ -8,7 +8,7 @@ export default function Timer({ duration }: { duration: number }) {
       isPlaying
       duration={duration}
       colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-      colorsTime={[40, 30, 20, 0]}
+      colorsTime={[10, 6, 3, 0]}
     >
       {({ remainingTime }) => remainingTime}
     </CountdownCircleTimer>
