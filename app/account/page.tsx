@@ -30,15 +30,17 @@ export default async function AccountPage() {
   }
 
   return (
-    <div>
+    <section className="grid gap-6">
+      <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+        Account
+      </h1>
       <AccountForm user={user} profile={data} />
-      <div className="mt-6">
-        <form action="/auth/signout" method="post">
-          <Button variant={"outline"} className="block w-full" type="submit">
-            Sign out
-          </Button>
-        </form>
-      </div>
-    </div>
+
+      <form action="/auth/signout" method="post">
+        <Button variant={"outline"} className="block w-full" type="submit">
+          Sign out
+        </Button>
+      </form>
+    </section>
   )
 }

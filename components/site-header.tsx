@@ -15,10 +15,26 @@ export async function SiteHeader() {
     data: { session },
   } = await supabase.auth.getSession()
 
+  if (!session)
+    return (
+      <header className="sticky top-0 z-40 w-full border-b bg-background">
+        <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
+          <MainNav items={siteConfig.mainNav} />
+          <div className="flex flex-1 items-center justify-end space-x-4">
+            <nav className="flex items-center space-x-1">
+              <ThemeToggle />
+            </nav>
+          </div>
+        </div>
+      </header>
+    )
+
+  const user = session.user
+
   const { data, error, status } = await supabase
     .from("profiles")
     .select(`full_name, username, website, avatar_url`)
-    .eq("id", session?.user?.id ?? "")
+    .eq("id", user.id)
     .single()
 
   if (error && status !== 406) {
@@ -31,11 +47,9 @@ export async function SiteHeader() {
         <MainNav items={siteConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            {session && (
-              <Link href={"/account"}>
-                <Avatar url={data?.avatar_url ?? ""} size={35} />
-              </Link>
-            )}
+            <Link href={"/account"}>
+              <Avatar url={data?.avatar_url ?? ""} size={35} />
+            </Link>
             <ThemeToggle />
           </nav>
         </div>

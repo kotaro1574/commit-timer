@@ -1,37 +1,46 @@
+import { cookies } from "next/headers"
 import Link from "next/link"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
-import { siteConfig } from "@/config/site"
+import { Database } from "@/types/supabase"
 import { buttonVariants } from "@/components/ui/button"
+import { Icons } from "@/components/icons"
 
-export default function CommitsPage() {
+import { CommitButton } from "./commit-button"
+
+export default async function CommitsPage() {
+  const supabase = createServerComponentClient<Database>({ cookies })
+
+  const { data, error, status } = await supabase
+    .from("commits")
+    .select("id, title")
+
+  if (!data) return null
+
+  if (error && status !== 406) {
+    throw error
+  }
+
   return (
-    <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-      <div className="flex max-w-[980px] flex-col items-start gap-2">
+    <section className="grid gap-6">
+      <div className="flex w-full justify-between">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
           Commits
         </h1>
-        <p className="max-w-[700px] text-lg text-muted-foreground">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
-        </p>
+        <Link
+          href={"/commits/create"}
+          className={buttonVariants({ variant: "ghost" })}
+        >
+          <Icons.plus className="mr-2 h-4 w-4" />
+          new commit
+        </Link>
       </div>
       <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          GitHub
-        </Link>
+        {data.map((commit) => (
+          <div className="flex flex-col items-start gap-2">
+            <CommitButton id={commit.id}>{commit.title}</CommitButton>
+          </div>
+        ))}
       </div>
     </section>
   )
