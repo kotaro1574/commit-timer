@@ -1,7 +1,11 @@
 "use client"
 
+import { startTransition } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 
+import { Database } from "@/types/supabase"
 import { buttonVariants } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -12,6 +16,24 @@ import {
 import { Icons } from "@/components/icons"
 
 export function CommitDropdownMenu({ id }: { id: string }) {
+  const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
+
+  const onDelete = async () => {
+    try {
+      alert("Delete commit?")
+      const { error } = await supabase.from("commits").delete().eq("id", id)
+
+      if (error) throw error
+
+      startTransition(() => {
+        router.refresh()
+      })
+    } catch (error) {
+      alert("Error updating the data!")
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -26,7 +48,7 @@ export function CommitDropdownMenu({ id }: { id: string }) {
         <Link href={`/commits/${id}`}>
           <DropdownMenuItem>Edit</DropdownMenuItem>
         </Link>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
