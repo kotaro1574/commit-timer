@@ -4,7 +4,6 @@ import { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import QueryParamProvider from "@/components/query-param-provider"
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -42,14 +41,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <QueryParamProvider>
-              <div className="relative flex min-h-screen flex-col">
-                <SiteHeader />
-                <div className="container max-w-[980px] flex-1 pb-8 pt-6 md:py-10">
-                  {children}
-                </div>
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <div className="container max-w-[980px] flex-1 pb-8 pt-6 md:py-10">
+                {children}
               </div>
-            </QueryParamProvider>
+            </div>
             <TailwindIndicator />
           </ThemeProvider>
         </body>
