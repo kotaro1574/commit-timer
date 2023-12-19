@@ -16,12 +16,13 @@ const formSchema = z.object({
 })
 
 export default function TimerPage() {
-  const [isStart, setIsStart] = useState(false)
   const searchParams = useSearchParams()
   const title = searchParams.get("title")
   const time = Number(searchParams.get("time"))
+  const [isStart, setIsStart] = useState(false)
   const form = useCreateResultForm({ title, time })
 
+  const isNew = !title || !time
   const onSubmit = async (values: z.infer<typeof formSchema>) => {}
 
   return (
@@ -34,7 +35,9 @@ export default function TimerPage() {
           )}
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground">
-          {`Jot down what you're committing to and kick off the timer!`}
+          {isNew
+            ? `Pop in what you're committing to and let's get that timer rolling!`
+            : `Let's keep the ${title} vibes strong today!`}
         </p>
         <FormProvider {...form}>
           {!isStart ? (
