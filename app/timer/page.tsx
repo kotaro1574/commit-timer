@@ -9,12 +9,6 @@ import Timer from "./timer"
 import TimerForm from "./timer-form"
 import { useCreateResultForm } from "./useCreateResult"
 
-const formSchema = z.object({
-  title: z.string(),
-  time: z.coerce.number(),
-  description: z.string(),
-})
-
 export default function TimerPage() {
   const searchParams = useSearchParams()
   const title = searchParams.get("title")
@@ -23,7 +17,6 @@ export default function TimerPage() {
   const form = useCreateResultForm({ title, time })
 
   const isNew = !title || !time
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {}
 
   return (
     <section className="grid gap-6">
@@ -49,8 +42,8 @@ export default function TimerPage() {
               />
             </div>
           ) : (
-            <div className="mx-auto">
-              <Timer duration={time} />
+            <div className="mx-auto mt-10">
+              <Timer duration={time} onComplete={() => {}} />
             </div>
           )}
         </FormProvider>

@@ -2,15 +2,32 @@
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer"
 
-export default function Timer({ duration }: { duration: number }) {
+export default function Timer({
+  duration,
+  onComplete,
+}: {
+  duration: number
+  onComplete: () => void
+}) {
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = time % 60
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`
+  }
+
   return (
     <CountdownCircleTimer
       isPlaying
       duration={duration}
-      colors={["#004777", "#F7B801", "#A30000", "#A30000"]}
-      colorsTime={[10, 6, 3, 0]}
+      colors={"#F7A278"}
+      size={300}
+      onComplete={onComplete}
     >
-      {({ remainingTime }) => remainingTime}
+      {({ remainingTime }) => (
+        <div className="text-4xl font-bold">{formatTime(remainingTime)}</div>
+      )}
     </CountdownCircleTimer>
   )
 }
