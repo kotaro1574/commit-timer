@@ -15,29 +15,53 @@ export default function TimerPage() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
   const searchParams = useSearchParams()
-
+  const title = searchParams.get("title")
+  const time = Number(searchParams.get("time"))
+  const isNew = !title || !time
   const [isStart, setIsStart] = useState(false)
   const form = useCreateResultForm({
-    title: searchParams.get("title"),
-    time: Number(searchParams.get("time")),
+    title,
+    time,
   })
+
+  const onCreateCommit = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("commits")
+        .insert({
+          title: form.getValues("title"),
+          time: form.getValues("time"),
+        })
+        .select("title")
+        .single()
+
+      if (error) throw error
+      alert(`${data.title} Commit created! Go ahead and start the timer!`)
+    } catch (error) {
+      alert("Error creating the data!")
+    }
+  }
 
   const onComplete = async (totalElapsedTime: number) => {
     try {
-      const { error } = await supabase.from("results").insert({
-        title: form.getValues("title"),
-        description: form.getValues("description"),
-        time: totalElapsedTime,
-        start: form.getValues("start"),
-        end: new Date().toISOString(),
-      })
+      const { data, error } = await supabase
+        .from("results")
+        .insert({
+          title: form.getValues("title"),
+          description: form.getValues("description"),
+          time: totalElapsedTime,
+          start: form.getValues("start"),
+          end: new Date().toISOString(),
+        })
+        .select("title")
+        .single()
 
       if (error) throw error
-      alert(`Done!`)
+      alert(`${data.title} Done! 💪😤`)
 
       router.push("/commits")
     } catch (error) {
-      alert("Error updating the data!")
+      alert("Error creating the data!")
     }
   }
 
@@ -56,7 +80,8 @@ export default function TimerPage() {
           {!isStart ? (
             <div className="w-full">
               <TimerForm
-                onStart={() => {
+                onStart={async () => {
+                  if (isNew) await onCreateCommit()
                   setIsStart(true)
                   form.setValue("start", new Date().toISOString())
                 }}
