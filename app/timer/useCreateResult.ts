@@ -6,9 +6,10 @@ const formSchema = z.object({
   title: z.string(),
   time: z.coerce.number(),
   description: z.string(),
+  start: z.string(),
 })
 
-type CreateResultInput = z.infer<typeof formSchema>
+export type CreateResultInput = z.infer<typeof formSchema>
 
 type Params = {
   title: string | null
@@ -22,6 +23,7 @@ export const useCreateResultForm = ({ title, time }: Params) => {
       title: title ?? "",
       time: time ?? 0,
       description: "",
+      start: "",
     },
   })
 }

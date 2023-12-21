@@ -7,7 +7,7 @@ export default function Timer({
   onComplete,
 }: {
   duration: number
-  onComplete: () => void
+  onComplete: (totalElapsedTime: number) => void
 }) {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60)

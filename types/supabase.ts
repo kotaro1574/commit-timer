@@ -95,7 +95,7 @@ export interface Database {
           start?: string
           time?: number
           title?: string
-          user_id: string
+          user_id?: string
         }
         Update: {
           created_at?: string
