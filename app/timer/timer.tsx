@@ -16,7 +16,7 @@ export default function Timer({
       seconds < 10 ? `0${seconds}` : seconds
     }`
   }
-
+  console.log({ duration, type: typeof duration })
   return (
     <CountdownCircleTimer
       isPlaying

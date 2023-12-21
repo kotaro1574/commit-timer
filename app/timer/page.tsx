@@ -33,7 +33,7 @@ export default function TimerPage() {
       })
 
       if (error) throw error
-      alert(`${form.getValues("title")} Done!`)
+      alert(`Done!`)
 
       router.push("/commits")
     } catch (error) {
@@ -65,7 +65,7 @@ export default function TimerPage() {
           ) : (
             <div className="mx-auto mt-10">
               <Timer
-                duration={form.getValues("time")}
+                duration={Number(form.getValues("time"))}
                 onComplete={onComplete}
               />
             </div>
