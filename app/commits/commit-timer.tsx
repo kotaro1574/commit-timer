@@ -5,7 +5,7 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer"
 
 import { Button } from "@/components/ui/button"
 
-export default function Timer({
+export default function CommitTimer({
   duration,
   onComplete,
 }: {

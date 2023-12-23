@@ -6,6 +6,7 @@ import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 
 import { CommitDropdownMenu } from "./commit-dropdown-menu"
+import { CommitTimerDialog } from "./commit-timer-dialog"
 
 export function CommitButton({
   commit,
@@ -15,28 +16,11 @@ export function CommitButton({
     "created_at" | "user_id"
   >
 }) {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-
-  const queryString = () => {
-    const params = new URLSearchParams(searchParams)
-
-    Object.entries(commit).forEach(([key, value]) => {
-      params.set(key, String(value))
-    })
-
-    return params.toString()
-  }
-
-  const onClick = () => {
-    router.push(`/timer?${queryString()}`)
-  }
-
   return (
     <div className="flex">
-      <Button onClick={onClick} className="rounded-r-none">
-        {commit.title}
-      </Button>
+      <CommitTimerDialog commit={commit} start={new Date().toISOString()}>
+        <Button className="rounded-r-none">{commit.title}</Button>
+      </CommitTimerDialog>
       <CommitDropdownMenu id={commit.id} />
     </div>
   )
