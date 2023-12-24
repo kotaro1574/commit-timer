@@ -10,6 +10,8 @@ import {
   YAxis,
 } from "recharts"
 
+import { Card } from "@/components/ui/card"
+
 const data = [
   {
     name: "Jan",
@@ -49,7 +51,7 @@ const data = [
 ]
 export default function BarChart() {
   return (
-    <div className="h-[400px]">
+    <Card className="h-[400px] p-8">
       <ResponsiveContainer width="100%" height="100%">
         <BarChartRecharts width={730} height={250} data={data}>
           <XAxis dataKey="name" />
@@ -60,6 +62,6 @@ export default function BarChart() {
           <Bar dataKey="low" fill="#FA8072" />
         </BarChartRecharts>
       </ResponsiveContainer>
-    </div>
+    </Card>
   )
 }

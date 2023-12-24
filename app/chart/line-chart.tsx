@@ -11,6 +11,8 @@ import {
   YAxis,
 } from "recharts"
 
+import { Card } from "@/components/ui/card"
+
 const data = [
   {
     month: "Jan",
@@ -40,7 +42,7 @@ const data = [
 ]
 export default function LineChart() {
   return (
-    <div className="h-[400px]">
+    <Card className="h-[400px] p-8">
       <ResponsiveContainer width="100%" height="100%">
         <LineChartRecharts
           width={500}
@@ -72,6 +74,6 @@ export default function LineChart() {
           />
         </LineChartRecharts>
       </ResponsiveContainer>
-    </div>
+    </Card>
   )
 }

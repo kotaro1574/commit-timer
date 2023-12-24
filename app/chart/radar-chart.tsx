@@ -10,6 +10,8 @@ import {
   Tooltip,
 } from "recharts"
 
+import { Card } from "@/components/ui/card"
+
 const data = [
   {
     day: "Monday",
@@ -38,7 +40,7 @@ const data = [
 ]
 export default function RadarChart() {
   return (
-    <div className="h-[400px]">
+    <Card className="h-[400px] p-8">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChartRecharts
           outerRadius={90}
@@ -59,6 +61,6 @@ export default function RadarChart() {
           <Tooltip />
         </RadarChartRecharts>
       </ResponsiveContainer>
-    </div>
+    </Card>
   )
 }

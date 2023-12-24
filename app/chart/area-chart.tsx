@@ -9,6 +9,8 @@ import {
   YAxis,
 } from "recharts"
 
+import { Card } from "@/components/ui/card"
+
 const data = [
   {
     year: "2016",
@@ -48,7 +50,7 @@ const data = [
 ]
 export default function AreaChart() {
   return (
-    <div className="h-[400px]">
+    <Card className="h-[400px] p-8">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChartRecharts
           width={730}
@@ -85,6 +87,6 @@ export default function AreaChart() {
           />
         </AreaChartRecharts>
       </ResponsiveContainer>
-    </div>
+    </Card>
   )
 }

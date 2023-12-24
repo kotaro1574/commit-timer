@@ -8,6 +8,8 @@ import {
   Tooltip,
 } from "recharts"
 
+import { Card } from "@/components/ui/card"
+
 const data = [
   {
     name: "Twitter",
@@ -44,7 +46,7 @@ const colors = [
 ]
 export default function PieChart() {
   return (
-    <div className="h-[400px]">
+    <Card className="h-[400px] p-8">
       <ResponsiveContainer width="100%" height="100%">
         <PieChartRecharts width={730} height={250}>
           <Pie
@@ -63,6 +65,6 @@ export default function PieChart() {
           <Tooltip />
         </PieChartRecharts>
       </ResponsiveContainer>
-    </div>
+    </Card>
   )
 }
