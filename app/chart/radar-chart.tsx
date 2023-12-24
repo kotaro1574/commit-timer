@@ -40,7 +40,7 @@ const data = [
 ]
 export default function RadarChart() {
   return (
-    <Card className="h-[400px] p-8">
+    <Card className="h-[400px] w-full p-8">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChartRecharts
           outerRadius={90}

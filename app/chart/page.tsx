@@ -14,11 +14,15 @@ export default function ChartPage() {
           Chart
         </h1>
       </div>
-      <AreaChart />
-      <BarChart />
-      <PieChart />
-      <LineChart />
-      <RadarChart />
+      <div className="flex gap-6">
+        <AreaChart />
+        <BarChart />
+      </div>
+      <div className="flex gap-6">
+        <PieChart />
+        <LineChart />
+        <RadarChart />
+      </div>
     </section>
   )
 }
