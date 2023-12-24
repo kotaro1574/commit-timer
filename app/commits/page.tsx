@@ -36,11 +36,27 @@ export default async function CommitsPage() {
         </Link>
       </div>
       <div className="flex gap-4">
-        {data.map((commit) => (
-          <div className="flex flex-col items-start gap-2">
-            <CommitButton commit={commit} />
+        {data.length !== 0 ? (
+          data.map((commit) => (
+            <div className="flex flex-col items-start gap-2">
+              <CommitButton commit={commit} />
+            </div>
+          ))
+        ) : (
+          <div className="mx-auto">
+            <p className="text-lg text-gray-600">
+              No commits found. Start by creating your first commit!
+            </p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                className={buttonVariants({ variant: "default" })}
+                href={"/commits/create"}
+              >
+                Create Your First Commit
+              </Link>
+            </div>
           </div>
-        ))}
+        )}
       </div>
     </section>
   )
