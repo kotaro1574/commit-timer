@@ -3,24 +3,15 @@ export type SiteConfig = typeof siteConfig
 export const siteConfig = {
   name: "Commit Timer",
   description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+    "Maximize your productivity by committing to focused work sessions. Commit Timer helps you track your progress on tasks, set dedicated time intervals for deep concentration, and visualize your work patterns with insightful charts. Whether you're tackling complex projects or daily routines, make every second count with Commit Timer.",
   mainNav: [
     {
       title: "Commits",
       href: "/commits",
     },
     {
-      title: "Timer",
-      href: "/timer",
-    },
-    {
       title: "Chart",
       href: "/chart",
     },
   ],
-  links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
-  },
 }
