@@ -1,4 +1,6 @@
-import { ReactNode } from "react"
+"use client"
+
+import { ReactNode, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
@@ -29,16 +31,15 @@ const formSchema = z.object({
 
 export function CommitTimerDialog({
   commit,
-  start,
   children,
 }: {
   commit: Omit<
     Database["public"]["Tables"]["commits"]["Row"],
     "created_at" | "user_id"
   >
-  start: string
   children: ReactNode
 }) {
+  const [isOpen, setOpen] = useState(false)
   const supabase = createClientComponentClient<Database>()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,22 +48,25 @@ export function CommitTimerDialog({
     },
   })
 
+  const start = new Date().toLocaleString()
+
   const onComplete = async (totalElapsedTime: number) => {
     try {
       const { data, error } = await supabase
         .from("results")
         .insert({
           title: commit.title,
-          description: "",
+          description: form.getValues("memo"),
           time: totalElapsedTime,
           start: start,
-          end: new Date().toISOString(),
+          end: new Date().toLocaleString(),
         })
         .select("title")
         .single()
 
       if (error) throw error
       alert(`${data.title} Done! 💪😤`)
+      setOpen(false)
     } catch (error) {
       alert("Error creating the data!")
     }
@@ -70,17 +74,20 @@ export function CommitTimerDialog({
 
   const handleDialogOpenChange = (isOpen: boolean) => {
     if (isOpen) {
-      // Dialogが開かれた時の処理
+      setOpen(isOpen)
       console.log("Dialog opened")
     } else {
-      // Dialogが閉じられた時の処理
-      console.log("Dialog closed")
-      //   onComplete(/* ここに経過時間を入力 */)
+      const confirmEnd = window.confirm(
+        "Are you sure you want to end the timer?"
+      )
+      if (confirmEnd) {
+        onComplete(commit.time)
+      }
     }
   }
 
   return (
-    <Dialog onOpenChange={handleDialogOpenChange}>
+    <Dialog onOpenChange={handleDialogOpenChange} open={isOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="flex flex-col items-center sm:max-w-md md:max-w-2xl">
         <DialogHeader>

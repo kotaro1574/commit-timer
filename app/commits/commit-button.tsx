@@ -1,7 +1,3 @@
-"use client"
-
-import { useRouter, useSearchParams } from "next/navigation"
-
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 
@@ -18,7 +14,7 @@ export function CommitButton({
 }) {
   return (
     <div className="flex">
-      <CommitTimerDialog commit={commit} start={new Date().toISOString()}>
+      <CommitTimerDialog commit={commit}>
         <Button className="rounded-r-none">{commit.title}</Button>
       </CommitTimerDialog>
       <CommitDropdownMenu id={commit.id} />
