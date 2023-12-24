@@ -40,9 +40,11 @@ export default function CreateCommitForm() {
     try {
       setLoading(true)
 
+      const time = values.time * 60
+
       const { error } = await supabase.from("commits").insert({
         title: values.title,
-        time: values.time,
+        time,
       })
 
       if (error) throw error
@@ -79,7 +81,7 @@ export default function CreateCommitForm() {
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>time</FormLabel>
+              <FormLabel>{"time (minutes)"}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
