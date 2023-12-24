@@ -4,6 +4,7 @@ import AreaChart from "./area-chart"
 import BarChart from "./bar-chart"
 import LineChart from "./line-chart"
 import PieChart from "./pie-chart"
+import RadarChart from "./radar-chart"
 
 export default function ChartPage() {
   return (
@@ -17,6 +18,7 @@ export default function ChartPage() {
       <BarChart />
       <PieChart />
       <LineChart />
+      <RadarChart />
     </section>
   )
 }
