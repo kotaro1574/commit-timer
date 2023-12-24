@@ -1,22 +1,23 @@
-"use client"
-
-import { ReactNode } from "react"
-
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 
 import { CommitDropdownMenu } from "./commit-dropdown-menu"
+import { CommitTimerDialog } from "./commit-timer-dialog"
 
 export function CommitButton({
-  children,
-  id,
+  commit,
 }: {
-  children: ReactNode
-  id: string
+  commit: Omit<
+    Database["public"]["Tables"]["commits"]["Row"],
+    "created_at" | "user_id"
+  >
 }) {
   return (
     <div className="flex">
-      <Button className="rounded-r-none">{children}</Button>
-      <CommitDropdownMenu id={id} />
+      <CommitTimerDialog commit={commit}>
+        <Button className="rounded-r-none">{commit.title}</Button>
+      </CommitTimerDialog>
+      <CommitDropdownMenu id={commit.id} />
     </div>
   )
 }
