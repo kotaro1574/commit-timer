@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { startTransition, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
@@ -49,6 +49,9 @@ export default function CreateCommitForm() {
       alert("Commit created!")
       setLoading(false)
       router.push("/commits")
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       alert("Error updating the data!")
     } finally {
