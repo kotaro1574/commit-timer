@@ -31,7 +31,6 @@ const formSchema = z.object({
 export default function CreateCommitForm() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
-  const [color, setColor] = useState("#aabbcc")
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,7 +42,7 @@ export default function CreateCommitForm() {
       color: "",
     },
   })
-  console.log(form.watch("color"))
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
