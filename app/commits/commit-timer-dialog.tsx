@@ -1,6 +1,7 @@
 "use client"
 
-import { ReactNode, useState } from "react"
+import { ReactNode, startTransition, useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
@@ -41,6 +42,7 @@ export function CommitTimerDialog({
 }) {
   const [isOpen, setOpen] = useState(false)
   const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,6 +65,9 @@ export function CommitTimerDialog({
       if (error) throw error
       alert(`${commit.title} Done! 💪😤`)
       setOpen(false)
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       alert("Error updating the data!")
     }
