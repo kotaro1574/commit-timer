@@ -26,7 +26,7 @@ import { Textarea } from "@/components/ui/textarea"
 import CommitTimer from "./commit-timer"
 
 const formSchema = z.object({
-  memo: z.string(),
+  description: z.string(),
 })
 
 export function CommitTimerDialog({
@@ -44,44 +44,40 @@ export function CommitTimerDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      memo: "",
+      description: "",
     },
   })
 
-  const start = new Date().toLocaleString()
-
   const onComplete = async (totalElapsedTime: number) => {
     try {
-      const { data, error } = await supabase
-        .from("results")
-        .insert({
-          title: commit.title,
-          description: form.getValues("memo"),
-          time: totalElapsedTime,
-          start: start,
-          end: new Date().toLocaleString(),
+      const { error } = await supabase
+        .from("commits")
+        .update({
+          description: form.getValues("description"),
+          commit_time: commit.commit_time
+            ? commit.commit_time + totalElapsedTime
+            : totalElapsedTime,
         })
-        .select("title")
-        .single()
+        .eq("id", commit.id)
 
       if (error) throw error
-      alert(`${data.title} Done! 💪😤`)
+      alert(`${commit.title} Done! 💪😤`)
       setOpen(false)
     } catch (error) {
-      alert("Error creating the data!")
+      alert("Error updating the data!")
     }
   }
 
   const handleDialogOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       setOpen(isOpen)
-      console.log("Dialog opened")
     } else {
       const confirmEnd = window.confirm(
         "Are you sure you want to end the timer?"
       )
       if (confirmEnd) {
-        onComplete(commit.time)
+        setOpen(isOpen)
+        // onComplete(commit.time)
       }
     }
   }
@@ -99,10 +95,10 @@ export function CommitTimerDialog({
         <Form {...form}>
           <FormField
             control={form.control}
-            name="memo"
+            name="description"
             render={({ field }) => (
               <FormItem className="w-full max-w-[300px]">
-                <FormLabel>memo</FormLabel>
+                <FormLabel>description</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>

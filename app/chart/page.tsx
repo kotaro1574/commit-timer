@@ -10,15 +10,15 @@ import PieChart from "./pie-chart"
 import RadarChart from "./radar-chart"
 
 export default async function ChartPage() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  // const supabase = createServerComponentClient<Database>({ cookies })
 
-  const { data, error, status } = await supabase.from("results").select("*")
+  // const { data, error, status } = await supabase.from("results").select("*")
 
-  if (!data) return null
+  // if (!data) return null
 
-  if (error && status !== 406) {
-    throw error
-  }
+  // if (error && status !== 406) {
+  //   throw error
+  // }
 
   return (
     <section className="grid gap-6">
