@@ -1,8 +1,3 @@
-import { cookies } from "next/headers"
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-
-import { Database } from "@/types/supabase"
-
 import AreaChart from "./area-chart"
 import BarChart from "./bar-chart"
 import LineChart from "./line-chart"
