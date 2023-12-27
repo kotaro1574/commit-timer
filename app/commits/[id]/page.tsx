@@ -14,7 +14,7 @@ export default async function CommitPage({
 
   const { data, error, status } = await supabase
     .from("commits")
-    .select("id, title, time")
+    .select("id, title, time, description, color, commit_time")
     .eq("id", params.id)
     .single()
 

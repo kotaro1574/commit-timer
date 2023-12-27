@@ -46,7 +46,7 @@ export function CommitTimerDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: "",
+      description: commit.description ?? "",
     },
   })
 
