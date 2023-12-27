@@ -95,7 +95,7 @@ export function CommitTimerDialog({
           <DialogTitle>{commit.title}</DialogTitle>
         </DialogHeader>
         <div className="mt-6 flex items-center space-x-2">
-          <CommitTimer duration={commit.time} onComplete={onComplete} />
+          <CommitTimer commit={commit} onComplete={onComplete} />
         </div>
         <Form {...form}>
           <FormField

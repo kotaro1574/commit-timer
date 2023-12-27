@@ -53,7 +53,7 @@ export default function CreateCommitForm() {
         title: values.title,
         description: values.description,
         time,
-        color: "",
+        color: values.color,
       })
 
       if (error) throw error

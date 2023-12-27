@@ -15,9 +15,14 @@ export function CommitButton({
   return (
     <div className="flex">
       <CommitTimerDialog commit={commit}>
-        <Button className="rounded-r-none">{commit.title}</Button>
+        <Button
+          style={{ backgroundColor: commit.color }}
+          className="rounded-r-none"
+        >
+          {commit.title}
+        </Button>
       </CommitTimerDialog>
-      <CommitDropdownMenu id={commit.id} />
+      <CommitDropdownMenu commit={commit} />
     </div>
   )
 }

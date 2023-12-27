@@ -1,15 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { CountdownCircleTimer } from "react-countdown-circle-timer"
+import { ColorFormat, CountdownCircleTimer } from "react-countdown-circle-timer"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 
 export default function CommitTimer({
-  duration,
+  commit,
   onComplete,
 }: {
-  duration: number
+  commit: Pick<Database["public"]["Tables"]["commits"]["Row"], "time" | "color">
   onComplete: (totalElapsedTime: number) => void
 }) {
   const [isPlaying, setIsPlaying] = useState(true)
@@ -59,8 +60,8 @@ export default function CommitTimer({
     <div className="grid gap-4">
       <CountdownCircleTimer
         isPlaying={isPlaying}
-        duration={duration}
-        colors={"#F7A278"}
+        duration={commit.time}
+        colors={commit.color as ColorFormat}
         size={300}
         onComplete={onComplete}
         strokeWidth={12}
