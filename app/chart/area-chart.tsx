@@ -12,41 +12,13 @@ import {
 import { Card } from "@/components/ui/card"
 
 const data = [
-  {
-    year: "2016",
-    Iphone: 4000,
-    Samsung: 2400,
-  },
-  {
-    year: "2017",
-    Iphone: 3000,
-    Samsung: 1398,
-  },
-  {
-    year: "2018",
-    Iphone: 2000,
-    Samsung: 9800,
-  },
-  {
-    year: "2019",
-    Iphone: 2780,
-    Samsung: 3908,
-  },
-  {
-    year: "2020",
-    Iphone: 1890,
-    Samsung: 4800,
-  },
-  {
-    year: "2021",
-    Iphone: 2390,
-    Samsung: 3800,
-  },
-  {
-    year: "2022",
-    Iphone: 3490,
-    Samsung: 4300,
-  },
+  { week: "Mon", Iphone: 4000, Samsung: 2400 },
+  { week: "Tue", Iphone: 3000, Samsung: 1398 },
+  { week: "Wed", Iphone: 2000, Samsung: 9800 },
+  { week: "Thu", Iphone: 2780, Samsung: 3908 },
+  { week: "Fri", Iphone: 1890, Samsung: 4800 },
+  { week: "Sat", Iphone: 2390, Samsung: 3800 },
+  { week: "Sun", Iphone: 3490, Samsung: 4300 },
 ]
 export default function AreaChart() {
   return (
@@ -68,7 +40,7 @@ export default function AreaChart() {
               <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <XAxis dataKey="year" />
+          <XAxis dataKey="week" />
           <YAxis />
           <Tooltip />
           <Area
