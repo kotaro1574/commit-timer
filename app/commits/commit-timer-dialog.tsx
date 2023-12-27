@@ -52,15 +52,21 @@ export function CommitTimerDialog({
 
   const onComplete = async (totalElapsedTime: number) => {
     try {
-      const { error } = await supabase
-        .from("commits")
-        .update({
-          description: form.getValues("description"),
-          commit_time: commit.commit_time
-            ? commit.commit_time + totalElapsedTime
-            : totalElapsedTime,
-        })
-        .eq("id", commit.id)
+      const { error } = await supabase.from("committed-results").insert({
+        title: commit.title,
+        time: totalElapsedTime,
+        commit_id: commit.id,
+      })
+
+      // const { error } = await supabase
+      //   .from("commits")
+      //   .update({
+      //     description: form.getValues("description"),
+      //     commit_time: commit.commit_time
+      //       ? commit.commit_time + totalElapsedTime
+      //       : totalElapsedTime,
+      //   })
+      //   .eq("id", commit.id)
 
       if (error) throw error
       alert(`${commit.title} Done! 💪😤`)

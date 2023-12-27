@@ -60,12 +60,12 @@ export interface Database {
           user_id: string
         }
         Insert: {
-          commit_id: string
+          commit_id?: string
           created_at?: string
           id?: number
           time?: number
           title?: string
-          user_id: string
+          user_id?: string
         }
         Update: {
           commit_id?: string
