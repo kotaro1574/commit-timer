@@ -5,8 +5,6 @@ import { Database } from "@/types/supabase"
 import { formatDate } from "@/lib/formatDate"
 
 import AreaChart from "./area-chart"
-import BarChart from "./bar-chart"
-import LineChart from "./line-chart"
 import PieChart from "./pie-chart"
 import RadarChart from "./radar-chart"
 
@@ -76,8 +74,8 @@ export default async function ChartPage() {
         <PieChart />
         <RadarChart />
       </div>
-      <BarChart />
-      <LineChart />
+      {/* <BarChart />
+      <LineChart /> */}
     </section>
   )
 }
