@@ -44,15 +44,17 @@ export default async function ChartPage() {
   const areaChartData = commits.reduce((acc, cur) => {
     return acc.map((data) => ({
       ...data,
-      [cur.title]: filteredResults.reduce((_acc, _cur) => {
-        if (
-          formatDate(new Date(_cur.created_at), "MM/dd") === data.day &&
-          _cur.title === cur.title
-        ) {
-          return _acc + _cur.time
-        }
-        return _acc
-      }, 0),
+      [cur.title]: Math.round(
+        filteredResults.reduce((_acc, _cur) => {
+          if (
+            formatDate(new Date(_cur.created_at), "MM/dd") === data.day &&
+            _cur.title === cur.title
+          ) {
+            return _acc + _cur.time
+          }
+          return _acc
+        }, 0) / 60
+      ),
     }))
   }, getLastWeekDates())
 
@@ -68,12 +70,14 @@ export default async function ChartPage() {
     return {
       name: commit.title,
       color: commit.color,
-      value: committedResults.reduce((acc, cur) => {
-        if (cur.title === commit.title) {
-          return acc + cur.time
-        }
-        return acc
-      }, 0),
+      value: Math.round(
+        committedResults.reduce((acc, cur) => {
+          if (cur.title === commit.title) {
+            return acc + cur.time
+          }
+          return acc
+        }, 0) / 60
+      ),
     }
   })
 
