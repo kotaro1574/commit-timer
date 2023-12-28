@@ -15,8 +15,6 @@ export default async function ChartPage() {
   const lastWeek = new Date(today)
   lastWeek.setDate(today.getDate() - 6)
 
-  const lastWeekDate = lastWeek.toISOString()
-
   const { data: commits } = await supabase
     .from("commits")
     .select("title, created_at, color")
@@ -25,9 +23,13 @@ export default async function ChartPage() {
   const { data: committedResults } = await supabase
     .from("committed-results")
     .select("*")
-    .gte("created_at", lastWeekDate)
 
   if (!committedResults) return null
+
+  const filteredResults = committedResults.filter((result) => {
+    const createdAtDate = new Date(result.created_at)
+    return createdAtDate >= lastWeek
+  })
 
   const getLastWeekDates = (): {
     day: string
@@ -42,7 +44,7 @@ export default async function ChartPage() {
   const areaChartData = commits.reduce((acc, cur) => {
     return acc.map((data) => ({
       ...data,
-      [cur.title]: committedResults.reduce((_acc, _cur) => {
+      [cur.title]: filteredResults.reduce((_acc, _cur) => {
         if (
           formatDate(new Date(_cur.created_at), "MM/dd") === data.day &&
           _cur.title === cur.title
@@ -62,6 +64,19 @@ export default async function ChartPage() {
     }
   })
 
+  const chartData = commits.map((commit) => {
+    return {
+      name: commit.title,
+      color: commit.color,
+      value: committedResults.reduce((acc, cur) => {
+        if (cur.title === commit.title) {
+          return acc + cur.time
+        }
+        return acc
+      }, 0),
+    }
+  })
+
   return (
     <section className="grid gap-6">
       <div className="flex flex-col items-start gap-2">
@@ -71,8 +86,8 @@ export default async function ChartPage() {
       </div>
       <AreaChart data={areaChartData} colors={areaChartColors} />
       <div className="flex gap-6">
-        <PieChart />
-        <RadarChart />
+        <PieChart data={chartData} />
+        <RadarChart data={chartData} />
       </div>
       {/* <BarChart />
       <LineChart /> */}

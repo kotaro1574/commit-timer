@@ -25,20 +25,12 @@ const data = [
     day: "Wednesday",
     amount: 240,
   },
-  {
-    day: "Thursday",
-    amount: 230,
-  },
-  {
-    day: "Friday",
-    amount: 150,
-  },
-  {
-    day: "Saturday",
-    amount: 300,
-  },
 ]
-export default function RadarChart() {
+export default function RadarChart({
+  data,
+}: {
+  data: { name: string; value: number }[]
+}) {
   return (
     <Card className="h-[400px] w-full p-8">
       <ResponsiveContainer width="100%" height="100%">
@@ -49,10 +41,10 @@ export default function RadarChart() {
           data={data}
         >
           <PolarGrid />
-          <PolarAngleAxis dataKey="day" />
+          <PolarAngleAxis dataKey="name" />
           <Radar
-            name="Orders"
-            dataKey="amount"
+            name="minutes"
+            dataKey="value"
             stroke="#82ca9d"
             fill="#82ca9d"
             fillOpacity={0.6}

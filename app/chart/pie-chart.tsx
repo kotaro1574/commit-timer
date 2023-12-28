@@ -10,32 +10,6 @@ import {
 
 import { Card } from "@/components/ui/card"
 
-const data = [
-  {
-    name: "Twitter",
-    value: 200400,
-  },
-  {
-    name: "Facebook",
-    value: 205000,
-  },
-  {
-    name: "Instagram",
-    value: 23400,
-  },
-  {
-    name: "Snapchat",
-    value: 20000,
-  },
-  {
-    name: "LinkedIn",
-    value: 29078,
-  },
-  {
-    name: "YouTube",
-    value: 18900,
-  },
-]
 const colors = [
   "#8884d8",
   "#FA8072",
@@ -44,7 +18,11 @@ const colors = [
   "#3AC7EB",
   "#F9A603",
 ]
-export default function PieChart() {
+export default function PieChart({
+  data,
+}: {
+  data: { name: string; color: string; value: number }[]
+}) {
   return (
     <Card className="h-[400px] w-full p-8">
       <ResponsiveContainer width="100%" height="100%">
@@ -59,7 +37,7 @@ export default function PieChart() {
             label
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={colors[index]} />
+              <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
           <Tooltip />
