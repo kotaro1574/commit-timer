@@ -12,20 +12,6 @@ import {
 
 import { Card } from "@/components/ui/card"
 
-const data = [
-  {
-    day: "Monday",
-    amount: 500,
-  },
-  {
-    day: "Tuesday",
-    amount: 300,
-  },
-  {
-    day: "Wednesday",
-    amount: 240,
-  },
-]
 export default function RadarChart({
   data,
 }: {
