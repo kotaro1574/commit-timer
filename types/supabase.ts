@@ -11,21 +11,30 @@ export interface Database {
     Tables: {
       commits: {
         Row: {
+          color: string
+          commit_time: number | null
           created_at: string
+          description: string | null
           id: string
           time: number
           title: string
           user_id: string
         }
         Insert: {
+          color?: string
+          commit_time?: number | null
           created_at?: string
+          description?: string | null
           id?: string
           time?: number
           title?: string
           user_id?: string
         }
         Update: {
+          color?: string
+          commit_time?: number | null
           created_at?: string
+          description?: string | null
           id?: string
           time?: number
           title?: string
@@ -34,6 +43,48 @@ export interface Database {
         Relationships: [
           {
             foreignKeyName: "commits_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      "committed-results": {
+        Row: {
+          commit_id: string
+          created_at: string
+          id: number
+          time: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          commit_id?: string
+          created_at?: string
+          id?: number
+          time?: number
+          title?: string
+          user_id?: string
+        }
+        Update: {
+          commit_id?: string
+          created_at?: string
+          id?: number
+          time?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "committed-results_commit_id_fkey"
+            columns: ["commit_id"]
+            isOneToOne: false
+            referencedRelation: "commits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "committed-results_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -72,47 +123,6 @@ export interface Database {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      results: {
-        Row: {
-          created_at: string
-          description: string | null
-          end: string
-          id: string
-          start: string
-          time: number
-          title: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          end?: string
-          id?: string
-          start?: string
-          time?: number
-          title?: string
-          user_id?: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          end?: string
-          id?: string
-          start?: string
-          time?: number
-          title?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "results_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]

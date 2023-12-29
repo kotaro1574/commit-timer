@@ -1,6 +1,7 @@
 "use client"
 
-import { ReactNode, useState } from "react"
+import { ReactNode, startTransition, useState } from "react"
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { useForm } from "react-hook-form"
@@ -26,7 +27,7 @@ import { Textarea } from "@/components/ui/textarea"
 import CommitTimer from "./commit-timer"
 
 const formSchema = z.object({
-  memo: z.string(),
+  description: z.string(),
 })
 
 export function CommitTimerDialog({
@@ -41,47 +42,46 @@ export function CommitTimerDialog({
 }) {
   const [isOpen, setOpen] = useState(false)
   const supabase = createClientComponentClient<Database>()
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      memo: "",
+      description: commit.description ?? "",
     },
   })
 
-  const start = new Date().toLocaleString()
-
   const onComplete = async (totalElapsedTime: number) => {
     try {
-      const { data, error } = await supabase
-        .from("results")
-        .insert({
-          title: commit.title,
-          description: form.getValues("memo"),
-          time: totalElapsedTime,
-          start: start,
-          end: new Date().toLocaleString(),
-        })
-        .select("title")
-        .single()
+      const { error } = await supabase.from("committed-results").insert({
+        title: commit.title,
+        time: totalElapsedTime,
+        commit_id: commit.id,
+      })
 
       if (error) throw error
-      alert(`${data.title} Done! 💪😤`)
+
+      const audio = new Audio("/bell.mp3")
+      audio.play()
+
+      alert(`${commit.title} Done! 💪😤`)
       setOpen(false)
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
-      alert("Error creating the data!")
+      alert("Error updating the data!")
     }
   }
 
   const handleDialogOpenChange = (isOpen: boolean) => {
     if (isOpen) {
       setOpen(isOpen)
-      console.log("Dialog opened")
     } else {
       const confirmEnd = window.confirm(
         "Are you sure you want to end the timer?"
       )
       if (confirmEnd) {
-        onComplete(commit.time)
+        setOpen(isOpen)
       }
     }
   }
@@ -94,15 +94,15 @@ export function CommitTimerDialog({
           <DialogTitle>{commit.title}</DialogTitle>
         </DialogHeader>
         <div className="mt-6 flex items-center space-x-2">
-          <CommitTimer duration={commit.time} onComplete={onComplete} />
+          <CommitTimer commit={commit} onComplete={onComplete} />
         </div>
         <Form {...form}>
           <FormField
             control={form.control}
-            name="memo"
+            name="description"
             render={({ field }) => (
               <FormItem className="w-full max-w-[300px]">
-                <FormLabel>memo</FormLabel>
+                <FormLabel>description</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>

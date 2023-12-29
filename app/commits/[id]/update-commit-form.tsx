@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { startTransition, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { useForm } from "react-hook-form"
+import { HexColorPicker } from "react-colorful"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { Database } from "@/types/supabase"
@@ -18,10 +19,13 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 
 const formSchema = z.object({
   title: z.string(),
+  description: z.string(),
   time: z.coerce.number(),
+  color: z.string(),
 })
 
 export default function UpdateCommitForm({
@@ -39,7 +43,9 @@ export default function UpdateCommitForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: commit.title,
-      time: commit.time,
+      description: commit.description ?? "",
+      time: commit.time / 60,
+      color: commit.color,
     },
   })
 
@@ -47,18 +53,31 @@ export default function UpdateCommitForm({
     try {
       setLoading(true)
 
-      const { error } = await supabase
+      const commits = await supabase
         .from("commits")
         .update({
           title: values.title,
-          time: values.time,
+          description: values.description,
+          time: values.time * 60,
+          color: values.color,
         })
         .eq("id", commit.id)
 
-      if (error) throw error
+      if (commits.error) throw commits.error
+
+      const committedResults = await supabase
+        .from("committed-results")
+        .update({ title: values.title })
+        .eq("commit_id", commit.id)
+
+      if (committedResults.error) throw committedResults.error
+
       alert("Commit updated!")
       setLoading(false)
       router.push("/commits")
+      startTransition(() => {
+        router.refresh()
+      })
     } catch (error) {
       alert("Error updating the data!")
     } finally {
@@ -83,16 +102,38 @@ export default function UpdateCommitForm({
         />
         <FormField
           control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>description</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>time</FormLabel>
+              <FormLabel>{"time (minutes)"}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
               <FormDescription>
                 Please enter the time you wish to commit
               </FormDescription>
+            </FormItem>
+          )}
+        />
+        <Controller
+          control={form.control}
+          name="color"
+          render={({ field: { onChange, value } }) => (
+            <FormItem>
+              <FormLabel>color</FormLabel>
+              <HexColorPicker color={value} onChange={onChange} />
             </FormItem>
           )}
         />

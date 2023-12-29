@@ -15,14 +15,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/icons"
 
-export function CommitDropdownMenu({ id }: { id: string }) {
+export function CommitDropdownMenu({
+  commit,
+}: {
+  commit: Pick<Database["public"]["Tables"]["commits"]["Row"], "id" | "color">
+}) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
 
   const onDelete = async () => {
     try {
       alert("Delete commit?")
-      const { error } = await supabase.from("commits").delete().eq("id", id)
+      const { error } = await supabase
+        .from("commits")
+        .delete()
+        .eq("id", commit.id)
 
       if (error) throw error
 
@@ -41,11 +48,12 @@ export function CommitDropdownMenu({ id }: { id: string }) {
           variant: "default",
           size: "icon",
         })} w-6 rounded-l-none border-l-0`}
+        style={{ backgroundColor: commit.color }}
       >
         <Icons.more className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <Link href={`/commits/${id}`}>
+        <Link href={`/commits/${commit.id}`}>
           <DropdownMenuItem>Edit</DropdownMenuItem>
         </Link>
         <DropdownMenuItem onClick={onDelete}>Delete</DropdownMenuItem>

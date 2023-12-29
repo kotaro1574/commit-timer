@@ -1,30 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { CountdownCircleTimer } from "react-countdown-circle-timer"
+import { useState } from "react"
+import { ColorFormat, CountdownCircleTimer } from "react-countdown-circle-timer"
 
+import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
 
 export default function CommitTimer({
-  duration,
+  commit,
   onComplete,
 }: {
-  duration: number
+  commit: Pick<Database["public"]["Tables"]["commits"]["Row"], "time" | "color">
   onComplete: (totalElapsedTime: number) => void
 }) {
   const [isPlaying, setIsPlaying] = useState(true)
   const [key, setKey] = useState(0)
-  const [elapsedTime, setElapsedTime] = useState(0)
-
-  useEffect(() => {
-    if (isPlaying) {
-      const interval = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1)
-      }, 1000)
-
-      return () => clearInterval(interval)
-    }
-  }, [isPlaying])
+  const [remainingTime, setRemainingTime] = useState(0)
 
   const onStart = () => {
     setIsPlaying(true)
@@ -38,9 +29,11 @@ export default function CommitTimer({
     setIsPlaying(false)
     setKey((prevKey) => prevKey + 1)
   }
+
   const onEnd = () => {
     const confirmEnd = window.confirm("Are you sure you want to end the timer?")
     if (confirmEnd) {
+      const elapsedTime = commit.time - remainingTime
       onComplete(elapsedTime)
     } else {
       setIsPlaying(true)
@@ -59,10 +52,13 @@ export default function CommitTimer({
     <div className="grid gap-4">
       <CountdownCircleTimer
         isPlaying={isPlaying}
-        duration={duration}
-        colors={"#F7A278"}
+        duration={commit.time}
+        colors={commit.color as ColorFormat}
         size={300}
         onComplete={onComplete}
+        onUpdate={(remainingTime) => {
+          setRemainingTime(remainingTime)
+        }}
         strokeWidth={12}
         key={key}
         trailStrokeWidth={6}
