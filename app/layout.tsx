@@ -1,6 +1,9 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { cookies } from "next/headers"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
+import { Database } from "@/types/supabase"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
@@ -29,7 +32,20 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const supabase = createServerComponentClient<Database>({ cookies })
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const user = session?.user
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("avatar_url")
+    .eq("id", user?.id ?? "")
+    .single()
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -42,7 +58,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
+              <SiteHeader
+                session={session}
+                avatar_url={data?.avatar_url ?? ""}
+              />
               <div className="container max-w-[980px] flex-1 pb-8 pt-6 md:py-10">
                 {children}
               </div>
