@@ -1,6 +1,5 @@
-"use client"
-
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from "next/headers"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 
@@ -11,7 +10,7 @@ export default async function CommitPage({
 }: {
   params: { id: string }
 }) {
-  const supabase = createClientComponentClient<Database>()
+  const supabase = createServerComponentClient<Database>({ cookies })
 
   const { data, error, status } = await supabase
     .from("commits")
