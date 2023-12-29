@@ -35,7 +35,7 @@ export default async function CommitsPage() {
           new commit
         </Link>
       </div>
-      <div className="flex gap-4">
+      <div className="flex flex-wrap gap-4">
         {data.length !== 0 ? (
           data.map((commit) => (
             <div className="flex flex-col items-start gap-2">

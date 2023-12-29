@@ -58,17 +58,11 @@ export function CommitTimerDialog({
         commit_id: commit.id,
       })
 
-      // const { error } = await supabase
-      //   .from("commits")
-      //   .update({
-      //     description: form.getValues("description"),
-      //     commit_time: commit.commit_time
-      //       ? commit.commit_time + totalElapsedTime
-      //       : totalElapsedTime,
-      //   })
-      //   .eq("id", commit.id)
-
       if (error) throw error
+
+      const audio = new Audio("/bell.mp3")
+      audio.play()
+
       alert(`${commit.title} Done! 💪😤`)
       setOpen(false)
       startTransition(() => {
@@ -88,7 +82,6 @@ export function CommitTimerDialog({
       )
       if (confirmEnd) {
         setOpen(isOpen)
-        // onComplete(commit.time)
       }
     }
   }
