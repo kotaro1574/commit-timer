@@ -10,7 +10,10 @@ export default async function CommitPage({
 }: {
   params: { id: string }
 }) {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
 
   const { data, error, status } = await supabase
     .from("commits")

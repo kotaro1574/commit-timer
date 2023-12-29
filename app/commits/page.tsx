@@ -9,7 +9,10 @@ import { Icons } from "@/components/icons"
 import { CommitButton } from "./commit-button"
 
 export default async function CommitsPage() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
 
   const { data, error, status } = await supabase
     .from("commits")

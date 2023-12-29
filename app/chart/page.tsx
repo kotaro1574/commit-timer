@@ -9,7 +9,10 @@ import PieChart from "./pie-chart"
 import RadarChart from "./radar-chart"
 
 export default async function ChartPage() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
 
   const today = new Date()
   const lastWeek = new Date(today)

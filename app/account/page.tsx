@@ -7,7 +7,10 @@ import { Button } from "@/components/ui/button"
 import AccountForm from "./account-form"
 
 export default async function AccountPage() {
-  const supabase = createServerComponentClient<Database>({ cookies })
+  const cookieStore = cookies()
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  })
 
   const {
     data: { session },
