@@ -53,7 +53,7 @@ export default function UpdateCommitForm({
     try {
       setLoading(true)
 
-      const { error } = await supabase
+      const commits = await supabase
         .from("commits")
         .update({
           title: values.title,
@@ -63,7 +63,15 @@ export default function UpdateCommitForm({
         })
         .eq("id", commit.id)
 
-      if (error) throw error
+      if (commits.error) throw commits.error
+
+      const committedResults = await supabase
+        .from("committed-results")
+        .update({ title: values.title })
+        .eq("commit_id", commit.id)
+
+      if (committedResults.error) throw committedResults.error
+
       alert("Commit updated!")
       setLoading(false)
       router.push("/commits")
