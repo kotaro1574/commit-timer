@@ -20,6 +20,7 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useToast } from "@/components/ui/use-toast"
 
 import AvatarUploader from "./avatar-uploader"
 
@@ -42,6 +43,7 @@ type Props = {
 export default function AccountForm({ profile, user }: Props) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -73,13 +75,13 @@ export default function AccountForm({ profile, user }: Props) {
         updated_at: new Date().toISOString(),
       })
       if (error) throw error
-      alert("Profile updated!")
+      toast({ description: "Profile updated!" })
       setLoading(false)
       startTransition(() => {
         router.refresh()
       })
     } catch (error) {
-      alert("Error updating the data!")
+      toast({ variant: "destructive", description: "Error updating the data!" })
     } finally {
       setLoading(false)
     }
