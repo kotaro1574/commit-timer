@@ -23,6 +23,7 @@ import {
   FormLabel,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 
 import CommitTimer from "./commit-timer"
 
@@ -43,6 +44,7 @@ export function CommitTimerDialog({
   const [isOpen, setOpen] = useState(false)
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,13 +69,13 @@ export function CommitTimerDialog({
       const audio = new Audio("/bell.mp3")
       audio.play()
 
-      alert(`${commit.title} Done! 💪😤`)
+      toast({ description: `${commit.title} Done! 💪😤` })
       setOpen(false)
       startTransition(() => {
         router.refresh()
       })
     } catch (error) {
-      alert("Error updating the data!")
+      toast({ variant: "destructive", description: "Error creating the data!" })
     }
   }
 
