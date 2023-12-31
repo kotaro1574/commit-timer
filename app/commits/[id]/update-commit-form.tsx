@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   title: z.string(),
@@ -38,6 +39,7 @@ export default function UpdateCommitForm({
 }) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,14 +74,14 @@ export default function UpdateCommitForm({
 
       if (committedResults.error) throw committedResults.error
 
-      alert("Commit updated!")
+      toast({ description: "Commit updated!" })
       setLoading(false)
       router.push("/commits")
       startTransition(() => {
         router.refresh()
       })
     } catch (error) {
-      alert("Error updating the data!")
+      toast({ variant: "destructive", description: "Error updating the data!" })
     } finally {
       setLoading(false)
     }

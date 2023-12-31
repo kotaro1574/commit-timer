@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   title: z.string(),
@@ -31,6 +32,7 @@ const formSchema = z.object({
 export default function CreateCommitForm() {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -57,14 +59,15 @@ export default function CreateCommitForm() {
       })
 
       if (error) throw error
-      alert("Commit created!")
+
+      toast({ description: "Commit created!" })
       setLoading(false)
       router.push("/commits")
       startTransition(() => {
         router.refresh()
       })
     } catch (error) {
-      alert("Error updating the data!")
+      toast({ variant: "destructive", description: "Error updating the data!" })
     } finally {
       setLoading(false)
     }
