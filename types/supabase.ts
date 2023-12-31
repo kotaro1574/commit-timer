@@ -54,15 +54,15 @@ export interface Database {
         Row: {
           commit_id: string
           created_at: string
-          id: number
+          id: string
           time: number
           title: string
           user_id: string
         }
         Insert: {
-          commit_id?: string
+          commit_id: string
           created_at?: string
-          id?: number
+          id?: string
           time?: number
           title?: string
           user_id?: string
@@ -70,7 +70,7 @@ export interface Database {
         Update: {
           commit_id?: string
           created_at?: string
-          id?: number
+          id?: string
           time?: number
           title?: string
           user_id?: string
