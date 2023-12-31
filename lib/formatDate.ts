@@ -1,9 +1,5 @@
+import { format } from "date-fns-tz"
+
 export const formatDate = (date: Date) => {
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-
-  const paddedMonth = month.toString().padStart(2, "0")
-  const paddedDay = day.toString().padStart(2, "0")
-
-  return `${paddedMonth}/${paddedDay}`
+  return format(date, "MM/dd", { timeZone: "America/Vancouver" })
 }

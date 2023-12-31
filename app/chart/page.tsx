@@ -14,12 +14,8 @@ export default async function ChartPage() {
     cookies: () => cookieStore,
   })
 
-  const today = new Date(
-    new Date().toLocaleString("en-US", {
-      timeZone: "America/Vancouver",
-      timeZoneName: "short",
-    })
-  )
+  const today = new Date()
+
   const lastWeek = new Date(today)
   lastWeek.setDate(today.getDate() - 6)
 
@@ -43,12 +39,7 @@ export default async function ChartPage() {
     day: string
   }[] => {
     return Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(
-        new Date().toLocaleString("en-US", {
-          timeZone: "America/Vancouver",
-          timeZoneName: "short",
-        })
-      )
+      const date = new Date()
       date.setDate(today.getDate() - (6 - index))
       return { day: formatDate(date) }
     })
