@@ -50,7 +50,7 @@ export default async function ChartPage() {
         })
       )
       date.setDate(today.getDate() - (6 - index))
-      return { day: formatDate(date, "MM/dd") }
+      return { day: formatDate(date) }
     })
   }
 
@@ -60,7 +60,7 @@ export default async function ChartPage() {
       [cur.title]: Math.round(
         filteredResults.reduce((_acc, _cur) => {
           if (
-            formatDate(new Date(_cur.created_at), "MM/dd") === data.day &&
+            formatDate(new Date(_cur.created_at)) === data.day &&
             _cur.title === cur.title
           ) {
             return _acc + _cur.time
