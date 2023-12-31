@@ -56,6 +56,10 @@ export function CommitTimerDialog({
         title: commit.title,
         time: totalElapsedTime,
         commit_id: commit.id,
+        created_at: new Date().toLocaleString("en-US", {
+          timeZone: "America/Vancouver",
+          timeZoneName: "short",
+        }),
       })
 
       if (error) throw error
