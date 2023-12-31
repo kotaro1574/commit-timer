@@ -13,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useToast } from "@/components/ui/use-toast"
 import { Icons } from "@/components/icons"
 
 export function CommitDropdownMenu({
@@ -22,22 +23,28 @@ export function CommitDropdownMenu({
 }) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
+  const { toast } = useToast()
 
   const onDelete = async () => {
     try {
-      alert("Delete commit?")
-      const { error } = await supabase
-        .from("commits")
-        .delete()
-        .eq("id", commit.id)
+      const confirmEnd = window.confirm(
+        "Do you really want to delete the commit?"
+      )
+      if (confirmEnd) {
+        const { error } = await supabase
+          .from("commits")
+          .delete()
+          .eq("id", commit.id)
 
-      if (error) throw error
+        if (error) throw error
 
-      startTransition(() => {
-        router.refresh()
-      })
+        toast({ description: "Commit deleted!" })
+        startTransition(() => {
+          router.refresh()
+        })
+      }
     } catch (error) {
-      alert("Error updating the data!")
+      toast({ variant: "destructive", description: "Error updating the data!" })
     }
   }
 
