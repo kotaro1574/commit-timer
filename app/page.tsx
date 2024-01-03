@@ -1,4 +1,4 @@
-import AuthForm from "@/components/form/auth-form"
+import LoginForm from "@/components/form/login-form"
 
 export default function HomePage() {
   return (
@@ -11,8 +11,8 @@ export default function HomePage() {
         without having to remember your password.
       </p>
 
-      <div className="col-6 auth-widget">
-        <AuthForm />
+      <div className="col-6">
+        <LoginForm />
       </div>
     </section>
   )
