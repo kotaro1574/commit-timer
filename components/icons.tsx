@@ -1,5 +1,6 @@
 import {
   AlarmPlus,
+  Menu,
   Moon,
   MoreVertical,
   Plus,
@@ -19,4 +20,5 @@ export const Icons = {
   user: UserIcon,
   plus: Plus,
   more: MoreVertical,
+  menu: Menu,
 }
