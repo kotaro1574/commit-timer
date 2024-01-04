@@ -5,9 +5,9 @@ import { siteConfig } from "@/config/site"
 import { MainNav } from "@/components/main-nav"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-import { Icons } from "./icons"
+import { SiteDrawer } from "./site-drawer"
 import Avatar from "./ui/avatar"
-import { Button, buttonVariants } from "./ui/button"
+import { buttonVariants } from "./ui/button"
 
 export function SiteHeader({
   session,
@@ -32,9 +32,13 @@ export function SiteHeader({
           <ThemeToggle />
         </nav>
 
-        <Button className="sm:hidden" variant={"ghost"} size={"icon"}>
-          <Icons.menu className="h-5 w-5" />
-        </Button>
+        <div className="sm:hidden">
+          <SiteDrawer
+            items={siteConfig.mainNav}
+            session={session}
+            avatar_url={avatar_url}
+          />
+        </div>
       </div>
     </header>
   )
