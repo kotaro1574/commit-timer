@@ -23,9 +23,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
-  title: z.string(),
+  title: z.string().min(1, { message: "Title is required" }),
   description: z.string(),
-  time: z.coerce.number(),
+  time: z.coerce
+    .number()
+    .min(1, { message: "For time, enter 0 minutes or more." }),
   color: z.string(),
 })
 
@@ -85,6 +87,11 @@ export default function CreateCommitForm() {
               <FormControl>
                 <Input {...field} />
               </FormControl>
+              {form.formState.errors.title && (
+                <FormDescription>
+                  {form.formState.errors.title.message}
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
@@ -110,7 +117,9 @@ export default function CreateCommitForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Please enter the time you wish to commit
+                {form.formState.errors.time?.message
+                  ? form.formState.errors.time.message
+                  : "Enter how many minutes to commit"}
               </FormDescription>
             </FormItem>
           )}
