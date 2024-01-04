@@ -18,7 +18,7 @@ export default function RadarChart({
   data: { name: string; value: number }[]
 }) {
   return (
-    <Card className="h-[400px] w-full p-8">
+    <Card className="h-[330px] w-full p-4 sm:h-[400px] md:p-6">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChartRecharts
           outerRadius={90}
