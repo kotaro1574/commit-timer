@@ -40,14 +40,12 @@ export default function LoginForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
-      const { data, error } = await supabase.auth.signInWithOtp({
+      const { error } = await supabase.auth.signInWithOtp({
         email: values.email,
         options: {
           emailRedirectTo: process.env.NEXT_PUBLIC_REDIRECT_URL ?? "",
         },
       })
-
-      console.log({ data, error })
 
       if (error) {
         throw error

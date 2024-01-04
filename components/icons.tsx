@@ -1,9 +1,10 @@
 import {
   AlarmPlus,
+  Menu,
   Moon,
   MoreVertical,
   Plus,
-  SunMedium,
+  Sun,
   Twitter,
   UserIcon,
   type Icon as LucideIcon,
@@ -12,11 +13,12 @@ import {
 export type Icon = LucideIcon
 
 export const Icons = {
-  sun: SunMedium,
+  sun: Sun,
   moon: Moon,
   twitter: Twitter,
   logo: AlarmPlus,
   user: UserIcon,
   plus: Plus,
   more: MoreVertical,
+  menu: Menu,
 }

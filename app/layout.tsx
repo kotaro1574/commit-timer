@@ -66,9 +66,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <div className="relative flex min-h-screen flex-col">
                 <SiteHeader
                   session={session}
-                  avatar_url={data?.avatar_url ?? ""}
+                  avatar_url={data?.avatar_url ?? null}
                 />
-                <div className="container max-w-[980px] flex-1 pb-8 pt-6 md:py-10">
+                <div className="container max-w-[980px] flex-1 px-4 pb-8 pt-6 md:px-8 md:py-10">
                   {children}
                 </div>
               </div>

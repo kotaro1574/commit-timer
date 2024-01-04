@@ -93,7 +93,7 @@ export default async function ChartPage() {
         </h1>
       </div>
       <AreaChart data={areaChartData} colors={areaChartColors} />
-      <div className="flex gap-6">
+      <div className="grid gap-6 sm:flex">
         <PieChart data={chartData} />
         <RadarChart data={chartData} />
       </div>
