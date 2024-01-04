@@ -56,7 +56,7 @@ export default function AvatarUploader({
   return (
     <div>
       <Avatar url={url ?? ""} size={size} />
-      <div style={{ width: size }}>
+      <div style={{ width: size }} className="relative">
         <label
           className={`${buttonVariants({
             variant: "default",
@@ -71,6 +71,7 @@ export default function AvatarUploader({
           style={{
             visibility: "hidden",
             position: "absolute",
+            width: 0,
           }}
           type="file"
           id="single"
