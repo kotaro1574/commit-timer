@@ -62,7 +62,7 @@ export interface Database {
           id?: string
           time?: number
           title?: string
-          user_id?: string
+          user_id: string
         }
         Update: {
           commit_id?: string

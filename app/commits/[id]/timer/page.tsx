@@ -15,6 +15,12 @@ export default async function CommitTimerPage({
     cookies: () => cookieStore,
   })
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  const user = session?.user
+
   const { data, error, status } = await supabase
     .from("commits")
     .select("id, title, time, description, color")
@@ -32,7 +38,7 @@ export default async function CommitTimerPage({
       <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
         Commit Timer
       </h1>
-      <CommitTimerForm commit={data} />
+      <CommitTimerForm commit={data} userId={user?.id ?? ""} />
     </section>
   )
 }
