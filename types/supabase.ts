@@ -12,7 +12,6 @@ export interface Database {
       commits: {
         Row: {
           color: string
-          commit_time: number | null
           created_at: string
           description: string | null
           id: string
@@ -22,7 +21,6 @@ export interface Database {
         }
         Insert: {
           color?: string
-          commit_time?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -32,7 +30,6 @@ export interface Database {
         }
         Update: {
           color?: string
-          commit_time?: number | null
           created_at?: string
           description?: string | null
           id?: string
@@ -95,27 +92,21 @@ export interface Database {
       profiles: {
         Row: {
           avatar_url: string | null
-          full_name: string | null
           id: string
           updated_at: string | null
           username: string | null
-          website: string | null
         }
         Insert: {
           avatar_url?: string | null
-          full_name?: string | null
           id: string
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Update: {
           avatar_url?: string | null
-          full_name?: string | null
           id?: string
           updated_at?: string | null
           username?: string | null
-          website?: string | null
         }
         Relationships: [
           {

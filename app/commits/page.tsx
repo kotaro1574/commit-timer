@@ -16,7 +16,7 @@ export default async function CommitsPage() {
 
   const { data, error, status } = await supabase
     .from("commits")
-    .select("id, title, time, color, description, commit_time")
+    .select("id, title, time, color, description")
 
   if (!data) return null
 

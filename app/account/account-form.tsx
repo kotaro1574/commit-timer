@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,9 +26,7 @@ import { useToast } from "@/components/ui/use-toast"
 import AvatarUploader from "./avatar-uploader"
 
 const formSchema = z.object({
-  full_name: z.string(),
   username: z.string(),
-  website: z.string(),
   avatar_url: z.string(),
   email: z.string().email(),
 })
@@ -50,17 +49,13 @@ export default function AccountForm({ profile, user }: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: user.email,
-      full_name: profile.full_name || "",
       username: profile.username || "",
-      website: profile.website || "",
       avatar_url: profile.avatar_url || "",
     },
   })
 
   const onSubmit = async ({
-    full_name,
     username,
-    website,
     avatar_url,
   }: z.infer<typeof formSchema>) => {
     try {
@@ -68,9 +63,9 @@ export default function AccountForm({ profile, user }: Props) {
 
       const { error } = await supabase.from("profiles").upsert({
         id: user.id,
-        full_name,
+
         username,
-        website,
+
         avatar_url,
         updated_at: new Date().toISOString(),
       })
@@ -119,18 +114,11 @@ export default function AccountForm({ profile, user }: Props) {
               <FormControl>
                 <Input disabled {...field} />
               </FormControl>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="full_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="full_name">Full Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              {form.formState.errors.email && (
+                <FormDescription>
+                  {form.formState.errors.email.message}
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
@@ -146,23 +134,7 @@ export default function AccountForm({ profile, user }: Props) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="website"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="website">Website</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          className="block w-full"
-          disabled={loading || !form.formState.isValid}
-        >
+        <Button type="submit" className="block w-full" disabled={loading}>
           {loading ? "Loading ..." : "Update"}
         </Button>
       </form>

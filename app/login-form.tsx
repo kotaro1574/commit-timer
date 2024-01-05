@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -75,6 +76,11 @@ export default function LoginForm() {
               <FormControl>
                 <Input placeholder={"your email address"} {...field} />
               </FormControl>
+              {form.formState.errors.email && (
+                <FormDescription>
+                  {form.formState.errors.email.message}
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
