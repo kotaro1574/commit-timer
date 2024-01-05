@@ -25,11 +25,13 @@ const formSchema = z.object({
 })
 export function CommitTimerForm({
   commit,
+  userId,
 }: {
   commit: Omit<
     Database["public"]["Tables"]["commits"]["Row"],
     "created_at" | "user_id"
   >
+  userId: string
 }) {
   const supabase = createClientComponentClient<Database>()
   const router = useRouter()
@@ -45,6 +47,7 @@ export function CommitTimerForm({
     try {
       const { error } = await supabase.from("committed-results").insert({
         title: commit.title,
+        user_id: userId,
         time: totalElapsedTime,
         commit_id: commit.id,
         created_at: new Date().toLocaleString("en-US", {
