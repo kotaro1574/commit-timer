@@ -3,6 +3,8 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
 
 import { Database } from "@/types/supabase"
 
+import { CommitTimerForm } from "./commit-timer-form"
+
 export default async function CommitTimerPage({
   params,
 }: {
@@ -27,11 +29,10 @@ export default async function CommitTimerPage({
 
   return (
     <section className="grid gap-6">
-      <div className="flex w-full justify-between">
-        <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Commit Timer
-        </h1>
-      </div>
+      <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+        Commit Timer
+      </h1>
+      <CommitTimerForm commit={data} />
     </section>
   )
 }
