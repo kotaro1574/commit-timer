@@ -41,6 +41,7 @@
     "tailwind-merge": "^1.13.2",
     "tailwindcss-animate": "^1.0.6",
     "vaul": "^0.8.0",
+    "worker-timers": "^7.0.80",
     "zod": "^3.22.4"
   },
   "devDependencies": {

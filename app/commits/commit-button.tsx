@@ -1,8 +1,9 @@
+import Link from "next/link"
+
 import { Database } from "@/types/supabase"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 import { CommitDropdownMenu } from "./commit-dropdown-menu"
-import { CommitTimerDialog } from "./commit-timer-dialog"
 
 export function CommitButton({
   commit,
@@ -14,14 +15,13 @@ export function CommitButton({
 }) {
   return (
     <div className="flex">
-      <CommitTimerDialog commit={commit}>
-        <Button
-          style={{ backgroundColor: commit.color }}
-          className="rounded-r-none"
-        >
-          {commit.title}
-        </Button>
-      </CommitTimerDialog>
+      <Link
+        href={`/commits/${commit.id}/timer`}
+        style={{ backgroundColor: commit.color }}
+        className={`${buttonVariants({ variant: "default" })} rounded-r-none`}
+      >
+        {commit.title}
+      </Link>
       <CommitDropdownMenu commit={commit} />
     </div>
   )
