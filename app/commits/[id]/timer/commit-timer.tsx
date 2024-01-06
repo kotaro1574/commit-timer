@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ColorFormat, CountdownCircleTimer } from "react-countdown-circle-timer"
-import { setTimeout } from "worker-timers"
+import { clearTimeout, setTimeout } from "worker-timers"
 
 import { Database } from "@/types/supabase"
 import { Button } from "@/components/ui/button"
@@ -14,19 +14,31 @@ export default function CommitTimer({
   commit: Pick<Database["public"]["Tables"]["commits"]["Row"], "time" | "color">
   onComplete: (totalElapsedTime: number) => void
 }) {
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(true)
   const [key, setKey] = useState(0)
   const [remainingTime, setRemainingTime] = useState(0)
+  const [timeoutId, setTimeoutId] = useState<number>(0)
 
-  const onStart = () => {
-    setTimeout(() => {
+  const setTimer = ({ time }: { time: number }) => {
+    const id = setTimeout(() => {
       const audio = new Audio("/bell.mp3")
       audio.play()
-    }, commit.time * 1000)
+    }, time * 1000)
+
+    setTimeoutId(id)
+  }
+
+  useEffect(() => {
+    setTimer({ time: commit.time })
+  }, [])
+
+  const onStart = () => {
+    setTimer({ time: remainingTime })
     setIsPlaying(true)
   }
 
   const onStop = () => {
+    clearTimeout(timeoutId)
     setIsPlaying(false)
   }
 
