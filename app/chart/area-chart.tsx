@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts"
 
-import { Card } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type Props = {
   data: {
@@ -24,6 +24,33 @@ type Props = {
 }
 
 export default function AreaChart({ data, colors }: Props) {
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle> {label}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-2">
+              {payload.map((pld: any, index: number) => (
+                <div
+                  key={`${label}-${pld.dataKey}-${index}`}
+                  style={{ color: pld.color }}
+                >
+                  {pld.dataKey} :
+                  <span className="ml-4">{pld.value} minutes</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )
+    }
+
+    return null
+  }
+
   return (
     <Card className="h-[330px] w-full p-4 sm:h-[400px] md:p-6">
       <ResponsiveContainer width="100%" height="100%">
@@ -50,7 +77,10 @@ export default function AreaChart({ data, colors }: Props) {
           </defs>
           <XAxis dataKey="day" />
           <YAxis />
-          <Tooltip />
+          <Tooltip
+            content={<CustomTooltip />}
+            cursor={{ fill: "transparent" }}
+          />
           {colors.map((color) => (
             <Area
               key={color.id}

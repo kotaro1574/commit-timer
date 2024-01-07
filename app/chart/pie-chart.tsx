@@ -8,13 +8,31 @@ import {
   Tooltip,
 } from "recharts"
 
-import { Card } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function PieChart({
   data,
 }: {
   data: { name: string; color: string; value: number }[]
 }) {
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <Card>
+          <CardContent className="pt-6">
+            {payload.map((pld: any, index: number) => (
+              <div key={`${pld.dataKey}-${index}`} style={{ color: pld.color }}>
+                {pld.name} :<span className="ml-4">{pld.value} hours</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )
+    }
+
+    return null
+  }
+
   return (
     <Card className="h-[330px] w-full p-4 sm:h-[400px] md:p-6">
       <ResponsiveContainer width="100%" height="100%">
@@ -32,7 +50,7 @@ export default function PieChart({
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
         </PieChartRecharts>
       </ResponsiveContainer>
     </Card>
