@@ -80,7 +80,7 @@ export default async function ChartPage() {
             return acc + cur.time
           }
           return acc
-        }, 0) / 60
+        }, 0) / 3600
       ),
     }
   })
