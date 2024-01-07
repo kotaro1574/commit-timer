@@ -48,7 +48,7 @@ export default function RadarChart({
           <PolarGrid />
           <PolarAngleAxis dataKey="name" />
           <Radar
-            name="minutes"
+            name="all"
             dataKey="value"
             stroke="#82ca9d"
             fill="#82ca9d"
