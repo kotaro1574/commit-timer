@@ -45,18 +45,29 @@ export function CommitTimerForm({
 
   const onComplete = async (totalElapsedTime: number) => {
     try {
-      const { error } = await supabase.from("committed-results").insert({
-        title: commit.title,
-        user_id: userId,
-        time: totalElapsedTime,
-        commit_id: commit.id,
-        created_at: new Date().toLocaleString("en-US", {
-          timeZone: "America/Vancouver",
-          timeZoneName: "short",
-        }),
-      })
+      const { error: committedResultsError } = await supabase
+        .from("committed-results")
+        .insert({
+          title: commit.title,
+          user_id: userId,
+          time: totalElapsedTime,
+          commit_id: commit.id,
+          created_at: new Date().toLocaleString("en-US", {
+            timeZone: "America/Vancouver",
+            timeZoneName: "short",
+          }),
+        })
 
-      if (error) throw error
+      if (committedResultsError) throw committedResultsError
+
+      const { error: commitsError } = await supabase
+        .from("commits")
+        .update({
+          description: form.getValues("description"),
+        })
+        .eq("id", commit.id)
+
+      if (commitsError) throw commitsError
 
       toast({ description: `${commit.title} Done! 💪😤` })
 
